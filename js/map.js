@@ -84,7 +84,7 @@ var translateOfferTypeintoRussian = function (type) {
   }
   return type;
 };
-
+// Кость я здесь в правильном направлении двигаюсь? Она не работает но если а правильном я буду ее дорабатывать
 var renderFeatures = function (items) {
   var featuresList = adTemplate.querySelector('.popup__features');
   for (var k = 0; k < items.length; k++) {
@@ -118,8 +118,8 @@ var renderAd = function () {
   adElement.querySelector('.popup__type').textContent = translateOfferTypeintoRussian(ad.offer.type);
   adElement.querySelector('.popup__text--capacity').textContent = ad.offer.rooms + ' комнаты для ' + ad.offer.guests + ' гостей';
   adElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + ad.offer.checkin + ', выезд до ' + ad.offer.checkout;
-  // удобства вставляются без стилей Не знаю, что делать
-  adElement.querySelector('.popup__features').innerHTML = renderFeatures(ad.offer.features);
+  // подскажи как вставить весь блок UL. Когда после ('.popup__features') ничего не идет, eslint ругается
+  // adElement.querySelector('.popup__features').innerHTML = renderFeatures(ad.offer.features);
   adElement.querySelector('.popup__description').textContent = ad.offer.description;
   adElement.querySelector('.popup__avatar').src = ad.author.avatar;
   // здесь намудрила, прости, но работает же!
