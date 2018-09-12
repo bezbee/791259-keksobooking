@@ -8,11 +8,14 @@ var getRandomNumber = function (min, max) {
 
 var TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
 
-var types = ['palace', 'flat', 'house', 'bungalo'];
+var TYPES = ['palace', 'flat', 'house', 'bungalo'];
 
-var hoursNoonOneTwo = ['12:00', '13:00', '14:00'];
+var time = ['12:00', '13:00', '14:00'];
 
-var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+var PIN_WIDTH = 50;
+var PIN_HEIGHT = 70;
+
+var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
 var mapWidth = document.querySelector('.map').offsetWidth;
 
@@ -23,7 +26,7 @@ var ads = [];
 var customFeatures = [];
 
 for (var j = getRandomNumber(1, 6); j > 0; j--) {
-  customFeatures.push(features[j - 1]);
+  customFeatures.push(FEATURES[j - 1]);
 }
 
 for (var i = 0; i < NUMBER_OF_ADS; i++) {
@@ -37,11 +40,11 @@ for (var i = 0; i < NUMBER_OF_ADS; i++) {
         x: getRandomNumber(1, mapWidth),
         y: getRandomNumber(130, 630)},
       price: getRandomNumber(1000, 1000000),
-      type: types[Math.floor(Math.random() * types.length)],
+      type: TYPES[Math.floor(Math.random() * TYPES.length)],
       rooms: getRandomNumber(1, 5),
       guests: getRandomNumber(1, 5),
-      checkin: hoursNoonOneTwo[Math.floor(Math.random() * hoursNoonOneTwo.length)],
-      checkout: hoursNoonOneTwo[Math.floor(Math.random() * hoursNoonOneTwo.length)],
+      checkin: time[Math.floor(Math.random() * time.length)],
+      checkout: time[Math.floor(Math.random() * time.length)],
       features: customFeatures,
       description: '',
       photos: ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg']
@@ -57,8 +60,8 @@ var pinTemplate = document.querySelector('#pin')
 var renderPin = function (pin) {
   var pinElement = pinTemplate.cloneNode(true);
 
-  pinElement.style.top = pin.offer.address.y - 50 + 'px';
-  pinElement.style.left = pin.offer.address.x - 70 + 'px';
+  pinElement.style.top = pin.offer.address.y - PIN_WIDTH + 'px';
+  pinElement.style.left = pin.offer.address.x - PIN_HEIGHT + 'px';
   pinElement.querySelector('img').src = pin.author.avatar;
   pinElement.querySelector('img').alt = pin.offer.title;
   return pinElement;
@@ -84,54 +87,105 @@ var translateOfferTypeintoRussian = function (type) {
   }
   return type;
 };
-// Кость я здесь в правильном направлении двигаюсь? Она не работает но если а правильном я буду ее дорабатывать
+
+var renderAd = function (listing) {
+  var adElement = adTemplate.cloneNode(true);
+
+  adElement.querySelector('.popup__title').textContent = listing.offer.title;
+  adElement.querySelector('.popup__text--address').textContent = listing.offer.address.x + ', ' + listing.offer.address.y;
+  adElement.querySelector('.popup__text--price').textContent = listing.offer.price + '₽/ночь';
+  adElement.querySelector('.popup__type').textContent = translateOfferTypeintoRussian(listing.offer.type);
+
+  var rooms = ' комнаты для ';
+  if (listing.offer.rooms === 1) {
+    rooms = ' комнатa для ';
+  }
+  if (listing.offer.rooms === 5) {
+    rooms = ' комнат для ';
+  }
+
+  var guests = (listing.offer.guests === 1) ? ' гостя' : ' гостей';
+
+  adElement.querySelector('.popup__text--capacity').textContent = listing.offer.rooms + rooms + listing.offer.guests + guests;
+  adElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + listing.offer.checkin + ', выезд до ' + ad.offer.checkout;
+
+  var listingFeatures = listing.offer.features;
+  var listFeatures = adElement.querySelector('.popup__features');
+
+  var children = listFeatures.children;
+  //  приходиться все элементы удалять а потом вставлять
+  for (var n = children.length - 1; n >= 0; n--) {
+    var child = children[n];
+    child.parentElement.removeChild(child);
+  }
+  var fragment1 = document.createDocumentFragment();
+  for (var k = 0; k < listingFeatures.length; k++) {
+    var valueFeatures = listingFeatures[k];
+    var elementFeatures = document.createElement('li');
+    elementFeatures.className = 'popup__feature popup__feature--' + valueFeatures;
+    fragment1.appendChild(elementFeatures);
+  }
+  listFeatures.appendChild(fragment1);
+
+  adElement.querySelector('.popup__description').textContent = listing.offer.description;
+  adElement.querySelector('.popup__avatar').src = listing.author.avatar;
+  adElement.querySelector('.popup__photo').src = listing.offer.photos[0];
+  // Cтаралась я написать функцию но ничего не получилось Зато я теперь вставляю фрагмент
+  var fragment2 = document.createDocumentFragment();
+  for (var t = listing.offer.photos.length - 1; t > 0; t--) {
+    var image = adTemplate.querySelector('.popup__photo');
+    var imageElement = image.cloneNode();
+    imageElement.src = listing.offer.photos[t];
+    fragment2.appendChild(imageElement);
+  }
+  adElement.querySelector('.popup__photos').appendChild(fragment2);
+  return adElement;
+};
+document.querySelector('.map').insertBefore(renderAd(ads[0]), document.querySelector('.map__filters-container'));
+
+/*
+Функция для фоток увы не получилась
+var PICS =  ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
+
+photos: PICS[i];
+
+var renderPhotos = function (element) {
+  var image = adTemplate.querySelector('.popup__photo');
+  var imageElement = image.cloneNode();
+  imageElement.src = element.offer.photos;
+  return imageElement;
+};
+var fragment1 = document.createDocumentFragment();
+for (var t = PICS.length; t > 0; t--) {
+  fragment1.appendChild(renderPhotos(ads[t]));
+}
+adElement.querySelector('.popup__photos').removeChild('.popup__photo');
+adElement.querySelector('.popup__photos').appendChild(fragment1);
+
+// Кость, мне так хотелось вот так задачу осуществить но не работает Можешь посмотреть почему
+
 var renderFeatures = function (items) {
-  var featuresList = adTemplate.querySelector('.popup__features');
+
   for (var k = 0; k < items.length; k++) {
     if (!items[k] === 'wifi') {
-      featuresList.removechild(adTemplate.querySelector('.popup__feature--wifi'));
+      wifi.classList.add('hidden');
     }
     if (!items[k] === 'dishwasher') {
-      featuresList.removechild(adTemplate.querySelector('.popup__feature--dishwasher'));
+      dishwasher.classList.add('hidden');
     }
     if (!items[k] === 'parking') {
-      featuresList.removechild(adTemplate.querySelector('.popup__feature--parking'));
+      parking.classList.add('hidden');
     }
     if (!items[k] === 'washer') {
-      featuresList.removechild(adTemplate.querySelector('.popup__feature--washer'));
+      washer.classList.add('hidden');
     }
     if (!items[k] === 'elevator') {
-      featuresList.removechild(adTemplate.querySelector('.popup__feature--elevator'));
+      elevator.classList.add('hidden');
     }
     if (!items[k] === 'conditioner') {
-      featuresList.removechild(adTemplate.querySelector('.popup__feature--conditioner'));
+      conditioner.classList.add('hidden');
     }
   }
   return featuresList;
 };
-
-var renderAd = function () {
-  var adElement = adTemplate.cloneNode(true);
-  adElement.querySelector('.popup__title').textContent = ad.offer.title;
-  adElement.querySelector('.popup__text--address').textContent = ad.offer.address.x + ', ' + ad.offer.address.y;
-  adElement.querySelector('.popup__text--price').textContent = ad.offer.price + '₽/ночь';
-  adElement.querySelector('.popup__type').textContent = translateOfferTypeintoRussian(ad.offer.type);
-  adElement.querySelector('.popup__text--capacity').textContent = ad.offer.rooms + ' комнаты для ' + ad.offer.guests + ' гостей';
-  adElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + ad.offer.checkin + ', выезд до ' + ad.offer.checkout;
-  // подскажи как вставить весь блок UL. Когда после ('.popup__features') ничего не идет, eslint ругается
-  // adElement.querySelector('.popup__features').innerHTML = renderFeatures(ad.offer.features);
-  adElement.querySelector('.popup__description').textContent = ad.offer.description;
-  adElement.querySelector('.popup__avatar').src = ad.author.avatar;
-  // здесь намудрила, прости, но работает же!
-  adElement.querySelector('.popup__photo').src = ad.offer.photos[0];
-  for (var t = ad.offer.photos.length - 1; t > 0; t--) {
-    var image = document.createElement('img');
-    image.classList.add('popup__photo');
-    image.src = ad.offer.photos[t];
-    image.width = '45';
-    image.height = '40';
-    adElement.querySelector('.popup__photos').appendChild(image);
-  }
-  return adElement;
-};
-document.querySelector('.map').insertBefore(renderAd(ads[0]), document.querySelector('.map__filters-container'));
+*/
