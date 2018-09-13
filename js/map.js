@@ -140,7 +140,24 @@ var renderAd = function (listing) {
     imageElement.src = listing.offer.photos[t];
     fragment2.appendChild(imageElement);
   }
+
   adElement.querySelector('.popup__photos').appendChild(fragment2);
+
+  /*  Вот так получилось на вход массив на выход фрагмент но не работает Можем в понедельник вечером обговорить и попрактиковать debbuger?
+  var renderPhotos = function (element) {
+
+    var image = adTemplate.querySelector('.popup__photo');
+    var fragment2 = document.createDocumentFragment();
+
+    for (var t = element.length; t > 0; t--) {
+      var imageElement = image.cloneNode();
+      imageElement.src = element.offer.photos[t];
+      fragment2.appendChild(imageElement);
+    }
+  };
+  adElement.querySelector('.popup__photos').appendChild(renderPhotos(listing.offer.photos)); */
+
+
   return adElement;
 };
 document.querySelector('.map').insertBefore(renderAd(ads[0]), document.querySelector('.map__filters-container'));
