@@ -48,6 +48,10 @@ for (var i = 0; i < NUMBER_OF_ADS; i++) {
       features: customFeatures,
       description: '',
       photos: ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg']
+    },
+    location: {
+      x: getRandomNumber(1, mapWidth),
+      y: getRandomNumber(130, 630)
     }
   };
   ads.push(ad);
@@ -113,7 +117,6 @@ var renderAd = function (listing) {
   var listFeatures = adElement.querySelector('.popup__features');
 
   var children = listFeatures.children;
-  //  приходиться все элементы удалять а потом вставлять
   for (var n = children.length - 1; n >= 0; n--) {
     var child = children[n];
     child.parentElement.removeChild(child);
@@ -130,7 +133,6 @@ var renderAd = function (listing) {
   adElement.querySelector('.popup__description').textContent = listing.offer.description;
   adElement.querySelector('.popup__avatar').src = listing.author.avatar;
   adElement.querySelector('.popup__photo').src = listing.offer.photos[0];
-  // Cтаралась я написать функцию но ничего не получилось Зато я теперь вставляю фрагмент
   var fragment2 = document.createDocumentFragment();
   for (var t = listing.offer.photos.length - 1; t > 0; t--) {
     var image = adTemplate.querySelector('.popup__photo');
@@ -142,50 +144,3 @@ var renderAd = function (listing) {
   return adElement;
 };
 document.querySelector('.map').insertBefore(renderAd(ads[0]), document.querySelector('.map__filters-container'));
-
-/*
-Функция для фоток увы не получилась
-var PICS =  ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-
-photos: PICS[i];
-
-var renderPhotos = function (element) {
-  var image = adTemplate.querySelector('.popup__photo');
-  var imageElement = image.cloneNode();
-  imageElement.src = element.offer.photos;
-  return imageElement;
-};
-var fragment1 = document.createDocumentFragment();
-for (var t = PICS.length; t > 0; t--) {
-  fragment1.appendChild(renderPhotos(ads[t]));
-}
-adElement.querySelector('.popup__photos').removeChild('.popup__photo');
-adElement.querySelector('.popup__photos').appendChild(fragment1);
-
-// Кость, мне так хотелось вот так задачу осуществить но не работает Можешь посмотреть почему
-
-var renderFeatures = function (items) {
-
-  for (var k = 0; k < items.length; k++) {
-    if (!items[k] === 'wifi') {
-      wifi.classList.add('hidden');
-    }
-    if (!items[k] === 'dishwasher') {
-      dishwasher.classList.add('hidden');
-    }
-    if (!items[k] === 'parking') {
-      parking.classList.add('hidden');
-    }
-    if (!items[k] === 'washer') {
-      washer.classList.add('hidden');
-    }
-    if (!items[k] === 'elevator') {
-      elevator.classList.add('hidden');
-    }
-    if (!items[k] === 'conditioner') {
-      conditioner.classList.add('hidden');
-    }
-  }
-  return featuresList;
-};
-*/
