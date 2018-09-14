@@ -30,15 +30,26 @@ for (var j = getRandomNumber(1, 6); j > 0; j--) {
 }
 
 for (var i = 0; i < NUMBER_OF_ADS; i++) {
+
+  var getLocationX = function () {
+    var x = getRandomNumber(1, mapWidth);
+    return x;
+  };
+  var locationX = getLocationX();
+
+  var getLocationY = function () {
+    var y = getRandomNumber(130, 630);
+    return y;
+  };
+  var locationY = getLocationY();
+
   var ad = {
     author: {
       avatar: 'img/avatars/user0' + (1 + i) + '.png'
     },
     offer: {
       title: TITLES[i],
-      address: {
-        x: getRandomNumber(1, mapWidth),
-        y: getRandomNumber(130, 630)},
+      address: locationX + ', ' + locationY,
       price: getRandomNumber(1000, 1000000),
       type: TYPES[Math.floor(Math.random() * TYPES.length)],
       rooms: getRandomNumber(1, 5),
@@ -50,8 +61,8 @@ for (var i = 0; i < NUMBER_OF_ADS; i++) {
       photos: ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg']
     },
     location: {
-      x: getRandomNumber(1, mapWidth),
-      y: getRandomNumber(130, 630)
+      x: locationX,
+      y: locationY
     }
   };
   ads.push(ad);
@@ -64,8 +75,8 @@ var pinTemplate = document.querySelector('#pin')
 var renderPin = function (pin) {
   var pinElement = pinTemplate.cloneNode(true);
 
-  pinElement.style.top = pin.offer.address.y - PIN_WIDTH + 'px';
-  pinElement.style.left = pin.offer.address.x - PIN_HEIGHT + 'px';
+  pinElement.style.top = pin.location.y - PIN_WIDTH + 'px';
+  pinElement.style.left = pin.location.x - PIN_HEIGHT + 'px';
   pinElement.querySelector('img').src = pin.author.avatar;
   pinElement.querySelector('img').alt = pin.offer.title;
   return pinElement;
@@ -96,7 +107,7 @@ var renderAd = function (listing) {
   var adElement = adTemplate.cloneNode(true);
 
   adElement.querySelector('.popup__title').textContent = listing.offer.title;
-  adElement.querySelector('.popup__text--address').textContent = listing.offer.address.x + ', ' + listing.offer.address.y;
+  adElement.querySelector('.popup__text--address').textContent = listing.offer.address;
   adElement.querySelector('.popup__text--price').textContent = listing.offer.price + '₽/ночь';
   adElement.querySelector('.popup__type').textContent = translateOfferTypeintoRussian(listing.offer.type);
 
@@ -142,22 +153,6 @@ var renderAd = function (listing) {
   }
 
   adElement.querySelector('.popup__photos').appendChild(fragment2);
-
-  /*  Вот так получилось на вход массив на выход фрагмент но не работает Можем в понедельник вечером обговорить и попрактиковать debbuger?
-  var renderPhotos = function (element) {
-
-    var image = adTemplate.querySelector('.popup__photo');
-    var fragment2 = document.createDocumentFragment();
-
-    for (var t = element.length; t > 0; t--) {
-      var imageElement = image.cloneNode();
-      imageElement.src = element.offer.photos[t];
-      fragment2.appendChild(imageElement);
-    }
-  };
-  adElement.querySelector('.popup__photos').appendChild(renderPhotos(listing.offer.photos)); */
-
-
   return adElement;
 };
 document.querySelector('.map').insertBefore(renderAd(ads[0]), document.querySelector('.map__filters-container'));
