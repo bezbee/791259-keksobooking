@@ -101,6 +101,13 @@ var conjugateRooms = function (adData) {
   return rooms;
 };
 
+var renderFeature = function (adData) {
+  var valueFeatures = adData;
+  var elementFeatures = document.createElement('li');
+  elementFeatures.className = 'popup__feature popup__feature--' + valueFeatures;
+  return elementFeatures;
+};
+
 var fillCard = function (adData) {
   var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
   var cardElement = cardTemplate.cloneNode(true);
@@ -118,35 +125,25 @@ var fillCard = function (adData) {
 
   var adDataFeatures = adData.offer.features;
   var listFeatures = cardElement.querySelector('.popup__features');
+  listFeatures.innerHTML = '';
 
-  var children = listFeatures.children;
-  for (var n = children.length - 1; n >= 0; n--) {
-    var child = children[n];
-    child.parentElement.removeChild(child);
-  }
-  var fragment1 = document.createDocumentFragment();
   for (var k = 0; k < adDataFeatures.length; k++) {
-    var valueFeatures = adDataFeatures[k];
-    var elementFeatures = document.createElement('li');
-    elementFeatures.className = 'popup__feature popup__feature--' + valueFeatures;
-    fragment1.appendChild(elementFeatures);
+    listFeatures.appendChild(renderFeature(adData.offer.features[k]));
   }
-  listFeatures.appendChild(fragment1);
 
   cardElement.querySelector('.popup__description').textContent = adData.offer.description;
   cardElement.querySelector('.popup__avatar').src = adData.author.avatar;
-  cardElement.querySelector('.popup__photo').src = adData.offer.photos[0];
-  var renderPhotos = function (src) {
+  cardElement.querySelector('.popup__photos').innerHTML = '';
+  var renderPhoto = function (src) {
     var image = cardTemplate.querySelector('.popup__photo');
     var imageElement = image.cloneNode();
     imageElement.src = src;
     return imageElement;
   };
-  var fragment2 = document.createDocumentFragment();
-  for (var t = 1; t < adData.offer.photos.length; t++) {
-    fragment2.appendChild(renderPhotos(adData.offer.photos[t]));
+
+  for (var t = 0; t < adData.offer.photos.length; t++) {
+    cardElement.querySelector('.popup__photos').appendChild(renderPhoto(adData.offer.photos[t]));
   }
-  cardElement.querySelector('.popup__photos').appendChild(fragment2);
   return cardElement;
 };
 document.querySelector('.map').insertBefore(fillCard(ads[0]), document.querySelector('.map__filters-container'));
