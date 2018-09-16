@@ -10,7 +10,7 @@ var TITLES = ['Большая уютная квартира', 'Маленька�
 
 var TYPES = ['palace', 'flat', 'house', 'bungalo'];
 
-var time = ['12:00', '13:00', '14:00'];
+var TIME = ['12:00', '13:00', '14:00'];
 
 var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
@@ -30,18 +30,8 @@ for (var j = getRandomNumber(1, 6); j > 0; j--) {
 }
 
 for (var i = 0; i < NUMBER_OF_ADS; i++) {
-
-  var getLocationX = function () {
-    var x = getRandomNumber(1, mapWidth);
-    return x;
-  };
-  var locationX = getLocationX();
-
-  var getLocationY = function () {
-    var y = getRandomNumber(130, 630);
-    return y;
-  };
-  var locationY = getLocationY();
+  var x = getRandomNumber(1, mapWidth);
+  var y = getRandomNumber(130, 630);
 
   var ad = {
     author: {
@@ -49,20 +39,20 @@ for (var i = 0; i < NUMBER_OF_ADS; i++) {
     },
     offer: {
       title: TITLES[i],
-      address: locationX + ', ' + locationY,
+      address: x + ', ' + y,
       price: getRandomNumber(1000, 1000000),
       type: TYPES[Math.floor(Math.random() * TYPES.length)],
       rooms: getRandomNumber(1, 5),
       guests: getRandomNumber(1, 5),
-      checkin: time[Math.floor(Math.random() * time.length)],
-      checkout: time[Math.floor(Math.random() * time.length)],
+      checkin: TIME[Math.floor(Math.random() * TIME.length)],
+      checkout: TIME[Math.floor(Math.random() * TIME.length)],
       features: customFeatures,
       description: '',
       photos: ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg']
     },
     location: {
-      x: locationX,
-      y: locationY
+      x: x,
+      y: y
     }
   };
   ads.push(ad);
