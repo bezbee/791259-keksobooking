@@ -1,15 +1,17 @@
 'use strict';
 
-document.querySelector('.map').classList.remove('map--faded');
-
 var TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
 var TYPES = ['palace', 'flat', 'house', 'bungalo'];
 var TIME = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-
+var MAIN_PIN_HEIGHT_AND_WIDTH = 65;
+var MAIN_PIN_X = 570;
+var MAIN_PIN_Y = 375;
 var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
 var NUMBER_OF_ADS = 8;
 
 var mapWidth = document.querySelector('.map').offsetWidth;
@@ -68,14 +70,20 @@ var createPin = function (adData) {
   pinElement.style.left = adData.location.x - PIN_HEIGHT + 'px';
   pinElement.querySelector('img').src = adData.author.avatar;
   pinElement.querySelector('img').alt = adData.offer.title;
+  pinElement.addEventListener('click', function () {
+    hideCard();
+    showCard(adData);
+  });
   return pinElement;
 };
 
-var fragment = document.createDocumentFragment();
-for (var v = 0; v < ads.length; v++) {
-  fragment.appendChild(createPin(ads[v]));
-}
-document.querySelector('.map__pins').appendChild(fragment);
+var createPins = function (adsData) {
+  var fragment = document.createDocumentFragment();
+  for (var v = 0; v < ads.length; v++) {
+    fragment.appendChild(createPin(adsData[v]));
+  }
+  document.querySelector('.map__pins').appendChild(fragment);
+};
 
 var translateOfferTypeintoRussian = function (adData) {
   if (adData === 'palace') {
@@ -146,4 +154,88 @@ var fillCard = function (adData) {
   }
   return cardElement;
 };
-document.querySelector('.map').insertBefore(fillCard(ads[0]), document.querySelector('.map__filters-container'));
+
+// Module 4
+var map = document.querySelector('.map');
+var mainPin = document.querySelector('.map__pin--main');
+var adForm = document.querySelector('.ad-form');
+var activateSite = function () {
+  document.querySelector('.map').classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  createPins(ads);
+};
+
+mainPin.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    activateSite();
+    adForm.querySelector('#address').setAttribute('value', (MAIN_PIN_X + MAIN_PIN_HEIGHT_AND_WIDTH / 2) + ', ' +
+  (MAIN_PIN_Y + MAIN_PIN_HEIGHT_AND_WIDTH));
+  }
+});
+
+(function () {
+
+  mainPin.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+
+    var startCoords = {
+      x: evt.clientX,
+      y: evt.clientY
+    };
+
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+
+      var shift = {
+        x: startCoords.x - moveEvt.clientX,
+        y: startCoords.y - moveEvt.clientY
+      };
+
+      startCoords = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY
+      };
+
+      mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
+      mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
+    };
+
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+      activateSite();
+      adForm.querySelector('#address').setAttribute('value', (evt.pageX + MAIN_PIN_HEIGHT_AND_WIDTH / 2) + ', ' +
+    (evt.pageY + MAIN_PIN_HEIGHT_AND_WIDTH));
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  });
+
+})();
+
+var onEscClose = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    hideCard();
+  }
+};
+
+var showCard = function (adData) {
+  fillCard(adData);
+  map.insertBefore(fillCard(adData), document.querySelector('.map__filters-container'));
+  var closePopup = document.querySelector('.popup__close');
+  closePopup.focus();
+  closePopup.addEventListener('click', function () {
+    hideCard();
+  });
+  document.addEventListener('keydown', onEscClose);
+};
+
+var hideCard = function () {
+  document.removeEventListener('keydown', onEscClose);
+  var cardToRemove = map.querySelector('.map__card');
+  if (cardToRemove) {
+    cardToRemove.parentElement.removeChild(cardToRemove);
+  }
+};
