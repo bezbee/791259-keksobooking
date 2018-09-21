@@ -160,6 +160,19 @@ var createPin = function (adData) {
 
       mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
       mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
+      if (mainPin.offsetTop - shift.y < Y_START - mainPinCoords.height) {
+        mainPin.style.top = Y_START - mainPinCoords.height + 'px';
+      }
+      if (mainPin.offsetLeft - shift.x < 0) {
+        mainPin.style.left = 0 + 'px';
+      }
+      if (mainPin.offsetTop - shift.y > Y_END) {
+        mainPin.style.top = Y_END + 'px';
+      }
+
+      if (mainPin.offsetLeft - shift.x > map.clientWidth - mainPinCoords.width) {
+        mainPin.style.left = map.clientWidth - mainPinCoords.width + 'px';
+      }
     };
 
     var onMouseUp = function (upEvt) {
@@ -231,8 +244,6 @@ for (var i = 0; i < NUMBER_OF_ADS; i++) {
   ads.push(ad);
 }
 
-document.querySelector('.map').insertBefore(fillCard(ads[0]), document.querySelector('.map__filters-container'));
-
 var syncronizeTypeWithPrice = function (index, minPrice) {
   if (typeSelect.selectedIndex === index) {
     priceInput.placeholder = minPrice;
@@ -288,4 +299,3 @@ function changeRoomsList() {
 
 var roomsList = document.querySelector('#room_number');
 roomsList.addEventListener('change', changeRoomsList);
-
