@@ -80,7 +80,6 @@ var fillCard = function (adData) {
   cardElement.querySelector('.popup__text--price').textContent = adData.offer.price + '₽/ночь';
   cardElement.querySelector('.popup__type').textContent = translateOfferTypeintoRussian(adData.offer.type);
 
-
   var guests = (adData.offer.guests === 1) ? ' гостя' : ' гостей';
 
   cardElement.querySelector('.popup__text--capacity').textContent = adData.offer.rooms + conjugateRooms(adData.offer.rooms) + adData.offer.guests + guests;
@@ -118,7 +117,6 @@ var activateSite = function () {
   renderPins(ads);
 };
 
-
 var createPin = function (adData) {
   var pinTemplate = document.querySelector('#pin')
       .content
@@ -141,7 +139,6 @@ var createPin = function (adData) {
   mainPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
     var mainPinCoords = mainPin.getBoundingClientRect();
-
 
     var startCoords = {
       x: evt.clientX,
