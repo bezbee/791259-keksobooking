@@ -157,8 +157,8 @@ var syncronizeTypeWithPrice = function (index, minPrice) {
 
 var priceInput = document.querySelector('#price');
 var typeSelect = document.querySelector('#type');
+var MIN_PRICE = ['0', '5000', '1000', '10000'];
 typeSelect.addEventListener('change', function () {
-  var MIN_PRICE = ['0', '5000', '1000', '10000'];
   for (var t = 0; t < typeSelect.length; t++) {
     syncronizeTypeWithPrice(t, MIN_PRICE[t]);
   }
@@ -169,22 +169,13 @@ var timeOutSelect = document.querySelector('#timeout');
 
 
 timeInSelect.addEventListener('change', function () {
-/*  var setCheckTimes = function (index) {
+  var setCheckTimes = function (index) {
     if (timeInSelect.selectedIndex === index) {
-      timeOutSelect.selectedIndex = 'index';
+      timeOutSelect.selectedIndex = index.toString();
     }
   };
   for (var t = 0; t < timeInSelect.length; t++) {
     setCheckTimes(t);
-  } */
-  if (timeInSelect.selectedIndex === 0) {
-    timeOutSelect.selectedIndex = '0';
-  }
-  if (timeInSelect.selectedIndex === 1) {
-    timeOutSelect.selectedIndex = '1';
-  }
-  if (timeInSelect.selectedIndex === 2) {
-    timeOutSelect.selectedIndex = '2';
   }
 });
 
