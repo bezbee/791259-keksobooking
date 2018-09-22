@@ -28,8 +28,10 @@
 
       mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
       mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
-      if (mainPin.offsetTop - shift.y < window.data.Y_START - mainPinCoords.height) {
-        mainPin.style.top = window.data.Y_START - mainPinCoords.height + 'px';
+
+      if (mainPin.offsetTop - shift.y < Y_START - mainPinCoords.height) {
+        mainPin.style.top = Y_START - mainPinCoords.height + 'px';
+
       }
       if (mainPin.offsetLeft - shift.x < 0) {
         mainPin.style.left = 0 + 'px';
@@ -40,6 +42,7 @@
 
       if (mainPin.offsetLeft - shift.x > window.data.map.clientWidth - mainPinCoords.width) {
         mainPin.style.left = window.data.map.clientWidth - mainPinCoords.width + 'px';
+
       }
     };
 
