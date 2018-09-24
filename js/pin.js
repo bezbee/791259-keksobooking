@@ -3,7 +3,7 @@
   var PIN_HEIGHT = 70;
   var ESC_KEYCODE = 27;
 
-  document.createPin = function (adData) {
+  window.createPin = function (adData) {
     var pinTemplate = document.querySelector('#pin')
         .content
         .querySelector('.map__pin');
