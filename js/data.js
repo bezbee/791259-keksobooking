@@ -48,7 +48,7 @@
         checkout: TIME[Math.floor(Math.random() * TIME.length)],
         features: shuffleArray(FEATURES).slice(0, getRandomNumber(1, FEATURES.length)),
         description: '',
-        photos: shuffleArray(PHOTOS)
+        photos: shuffleArray(PHOTOS).slice()
       },
       location: {
         x: x,

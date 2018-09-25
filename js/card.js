@@ -1,5 +1,7 @@
 'use strict';
 (function () {
+  var ESC_KEYCODE = 27;
+
   var translateOfferTypeintoRussian = function (adData) {
     if (adData === 'palace') {
       return 'Дворец';
@@ -45,11 +47,10 @@
     cardElement.querySelector('.popup__text--capacity').textContent = adData.offer.rooms + conjugateRooms(adData.offer.rooms) + adData.offer.guests + guests;
     cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + adData.offer.checkin + ', выезд до ' + adData.offer.checkout;
 
-    var adDataFeatures = adData.offer.features;
     var listFeatures = cardElement.querySelector('.popup__features');
     listFeatures.innerHTML = '';
 
-    for (var k = 0; k < adDataFeatures.length; k++) {
+    for (var k = 0; k < adData.offer.features.length; k++) {
       listFeatures.appendChild(renderFeature(adData.offer.features[k]));
     }
 
@@ -68,8 +69,35 @@
     }
     return cardElement;
   };
+
+  var showCard = function (adData) {
+    window.card.fillCard(adData);
+    window.data.map.insertBefore(window.card.fillCard(adData), document.querySelector('.map__filters-container'));
+    var closePopup = document.querySelector('.popup__close');
+    closePopup.focus();
+    closePopup.addEventListener('click', function () {
+      hideCard();
+    });
+    document.addEventListener('keydown', onEscClose);
+  };
+
+  var hideCard = function () {
+    document.removeEventListener('keydown', onEscClose);
+    var cardToRemove = document.querySelector('.map__card');
+    if (cardToRemove) {
+      cardToRemove.parentElement.removeChild(cardToRemove);
+    }
+  };
+  var onEscClose = function (evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      hideCard();
+    }
+  };
+
   window.card = {
-    fillCard: fillCard
+    fillCard: fillCard,
+    showCard: showCard,
+    hideCard: hideCard
   };
 
 })();
