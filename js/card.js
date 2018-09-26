@@ -1,6 +1,7 @@
 'use strict';
 (function () {
   var ESC_KEYCODE = 27;
+  var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
   var translateOfferTypeintoRussian = function (adData) {
     if (adData === 'palace') {
@@ -33,10 +34,16 @@
     return elementFeatures;
   };
 
-  var fillCard = function (adData) {
-    var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
-    var cardElement = cardTemplate.cloneNode(true);
+  var renderPhoto = function (src) {
+    var image = cardTemplate.querySelector('.popup__photo');
+    var imageElement = image.cloneNode();
+    imageElement.src = src;
+    return imageElement;
+  };
 
+  var fillCard = function (adData) {
+
+    var cardElement = cardTemplate.cloneNode(true);
     cardElement.querySelector('.popup__title').textContent = adData.offer.title;
     cardElement.querySelector('.popup__text--address').textContent = adData.offer.address;
     cardElement.querySelector('.popup__text--price').textContent = adData.offer.price + '₽/ночь';
@@ -50,23 +57,17 @@
     var listFeatures = cardElement.querySelector('.popup__features');
     listFeatures.innerHTML = '';
 
-    for (var k = 0; k < adData.offer.features.length; k++) {
-      listFeatures.appendChild(renderFeature(adData.offer.features[k]));
-    }
+    adData.offer.features.forEach(function (adFeature) {
+      listFeatures.appendChild(renderFeature(adFeature));
+    });
 
     cardElement.querySelector('.popup__description').textContent = adData.offer.description;
     cardElement.querySelector('.popup__avatar').src = adData.author.avatar;
     cardElement.querySelector('.popup__photos').innerHTML = '';
-    var renderPhoto = function (src) {
-      var image = cardTemplate.querySelector('.popup__photo');
-      var imageElement = image.cloneNode();
-      imageElement.src = src;
-      return imageElement;
-    };
 
-    for (var t = 0; t < adData.offer.photos.length; t++) {
-      cardElement.querySelector('.popup__photos').appendChild(renderPhoto(adData.offer.photos[t]));
-    }
+    adData.offer.photos.forEach(function (adPhoto) {
+      cardElement.querySelector('.popup__photos').appendChild(renderPhoto(adPhoto));
+    });
     return cardElement;
   };
 

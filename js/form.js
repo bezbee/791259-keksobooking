@@ -30,15 +30,15 @@
     }
     var guestsQuantity = roomsAndCapacity[roomNumber];
     if (guestsQuantity) {
-      for (var b = 0; b < guestsQuantity.length; b++) {
-        var guestsQuantityOption = new Option(guestsQuantity[b], b);
+      for (var i = 0; i < guestsQuantity.length; i++) {
+        var guestsQuantityOption = new Option(guestsQuantity[i], i);
         capacityList.options.add(guestsQuantityOption);
       }
     }
   }
   typeSelect.addEventListener('change', function () {
-    for (var t = 0; t < typeSelect.length; t++) {
-      syncronizeTypeWithPrice(t, MIN_PRICE[t]);
+    for (var i = 0; i < typeSelect.length; i++) {
+      syncronizeTypeWithPrice(i, MIN_PRICE[i]);
     }
   });
 
@@ -48,8 +48,8 @@
         timeOutSelect.selectedIndex = index.toString();
       }
     };
-    for (var t = 0; t < timeInSelect.length; t++) {
-      setCheckTimes(t);
+    for (var i = 0; i < timeInSelect.length; i++) {
+      setCheckTimes(i);
     }
   });
 

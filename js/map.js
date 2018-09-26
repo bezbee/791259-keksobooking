@@ -61,9 +61,9 @@
 
   var renderPins = function (adsData) {
     var fragment = document.createDocumentFragment();
-    for (var v = 0; v < adsData.length; v++) {
-      fragment.appendChild(window.createPin(adsData[v]));
-    }
+    adsData.forEach(function (adData) {
+      fragment.appendChild(window.createPin(adData));
+    });
     document.querySelector('.map__pins').appendChild(fragment);
   };
 
