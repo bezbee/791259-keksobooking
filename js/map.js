@@ -3,6 +3,12 @@
 (function () {
   var mainPin = document.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
+  adForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.upload(new FormData(adForm), function () {
+      adForm.reset();
+    }, errorHandler);
+  });
 
   mainPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -59,18 +65,27 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
-  var renderPins = function (adsData) {
+  var successHandler = function (adsData) {
     var fragment = document.createDocumentFragment();
-    adsData.forEach(function (adData) {
-      fragment.appendChild(window.createPin(adData));
-    });
+    for (var v = 0; v < adsData.length; v++) {
+      fragment.appendChild(window.createPin(adsData[v]));
+    }
     document.querySelector('.map__pins').appendChild(fragment);
+  };
+
+  var errorHandler = function (errorMessage) {
+    var errorTemplate = document.querySelector('#error')
+    .content
+    .querySelector('.error');
+    var errorElement = errorTemplate.cloneNode(true);
+    errorElement.querySelector('.error__message').textContent = errorMessage;
+    document.querySelector('main').appendChild(errorElement);
   };
 
   var activateSite = function () {
     window.data.map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
-    renderPins(window.data.ads);
+    window.load(successHandler, errorHandler);
   };
 
 })();
