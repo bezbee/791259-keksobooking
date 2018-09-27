@@ -98,7 +98,8 @@
   window.card = {
     fillCard: fillCard,
     showCard: showCard,
-    hideCard: hideCard
+    hideCard: hideCard,
+    ESC_KEYCODE: ESC_KEYCODE
   };
 
 })();
