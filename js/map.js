@@ -11,6 +11,10 @@
   var hideMessageElement = function (element) {
     element.parentElement.removeChild(element);
   };
+  var MainPin = {
+    TOP: 570 + 'px',
+    LEFT: 375 + 'px'
+  };
 
   var onESCHideMessageElement = function (evt, element) {
     if (evt.keyCode === window.card.ESC_KEYCODE) {
@@ -121,10 +125,12 @@
     window.card.hideCard();
     window.data.map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
-    mainPin.style.left = 570 + 'px';
-    mainPin.style.top = 375 + 'px';
+    mainPin.style.left = MainPin.TOP;
+    mainPin.style.top = MainPin.LEFT;
     adForm.querySelector('#address').setAttribute('value', '570, 375');
-
+    while (document.querySelector('.map__pins').children.length > 2) {
+      document.querySelector('.map__pins').removeChild(document.querySelector('.map__pins').lastChild);
+    }
   };
 
   var onSuccessMessage = function () {
