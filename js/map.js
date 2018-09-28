@@ -3,33 +3,25 @@
 (function () {
   var mainPin = document.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
+
+  var MainPin = {
+    TOP: 570,
+    LEFT: 375
+  };
+
   var errorTemplate = document.querySelector('#error')
   .content
   .querySelector('.error');
-  var errorElement = errorTemplate.cloneNode(true);
-
-  var hideMessageElement = function (element) {
-    element.parentElement.removeChild(element);
-  };
-  var MainPin = {
-    TOP: 570 + 'px',
-    LEFT: 375 + 'px'
-  };
-
-  var onESCHideMessageElement = function (evt, element) {
-    if (evt.keyCode === window.card.ESC_KEYCODE) {
-      hideMessageElement(element);
-    }
-  };
+  var successTemplate = document.querySelector('#success')
+  .content
+  .querySelector('.success');
 
   adForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
     window.upload(new FormData(adForm), function () {
-      deactivateSite();
       onSuccessMessage();
-      document.removeEventListener('keydown', function () {
-        onESCHideMessageElement(evt, errorElement);
-      });
+      deactivateSite();
+
     }, onErrorMessage);
   });
 
@@ -87,30 +79,57 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
-  var fragment = document.createDocumentFragment();
-  var renderPins = function (adsData) {
 
+  var renderPins = function (adsData) {
+    var fragment = document.createDocumentFragment();
     adsData.forEach(function (adData) {
       fragment.appendChild(window.createPin(adData));
     });
     document.querySelector('.map__pins').appendChild(fragment);
-    document.removeEventListener('keydown', function (evt) {
-      onESCHideMessageElement(evt, errorElement);
-    });
+  };
+
+  var hideMessageElement = function (element) {
+    element.parentElement.removeChild(element);
+  };
+
+  var onESCHideErrorMessage = function (evt) {
+    if (evt.keyCode === window.util.ESC_KEYCODE) {
+      document.querySelector('.error').parentElement.removeChild(document.querySelector('.error'));
+    }
+  };
+
+  var onESCHideSuccessMessage = function (evt) {
+    if (evt.keyCode === window.util.ESC_KEYCODE) {
+      document.querySelector('.success').parentElement.removeChild(document.querySelector('.success'));
+    }
   };
 
   var onErrorMessage = function (errorMessage) {
+    var errorElement = errorTemplate.cloneNode(true);
     errorElement.querySelector('.error__message').textContent = errorMessage;
     errorElement.addEventListener('click', function () {
       hideMessageElement(errorElement);
     });
-    document.addEventListener('keydown', function (evt) {
-      onESCHideMessageElement(evt, errorElement);
+    errorElement.addEventListener('keydown', function () {
+      document.removeEventListener('keydown', onESCHideErrorMessage);
     });
+    document.addEventListener('keydown', onESCHideErrorMessage);
     errorElement.querySelector('.error__button').addEventListener('click', function () {
       hideMessageElement(errorElement);
     });
     document.querySelector('main').appendChild(errorElement);
+  };
+
+  var onSuccessMessage = function () {
+    var successElement = successTemplate.cloneNode(true);
+    successElement.addEventListener('click', function () {
+      hideMessageElement(successElement);
+    });
+    successElement.addEventListener('keydown', function () {
+      document.removeEventListener('keydown', onESCHideSuccessMessage);
+    });
+    document.addEventListener('keyup', onESCHideSuccessMessage);
+    document.querySelector('main').appendChild(successElement);
   };
 
   var activateSite = function () {
@@ -119,33 +138,21 @@
     window.load(renderPins, onErrorMessage);
   };
 
-  var deactivateSite = function (evt) {
-    evt.preventDefault();
+  var deactivateSite = function () {
     adForm.reset();
     window.card.hideCard();
     window.data.map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
-    mainPin.style.left = MainPin.TOP;
-    mainPin.style.top = MainPin.LEFT;
-    adForm.querySelector('#address').setAttribute('value', '570, 375');
-    while (document.querySelector('.map__pins').children.length > 2) {
-      document.querySelector('.map__pins').removeChild(document.querySelector('.map__pins').lastChild);
+    mainPin.style.left = MainPin.TOP + 'px';
+    mainPin.style.top = MainPin.LEFT + 'px';
+    adForm.querySelector('#address').setAttribute('value', MainPin.TOP + ', ' + MainPin.LEFT);
+    var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    for (var i = pins.length - 1; i >= 0; i--) {
+      var child = pins[i];
+      child.parentElement.removeChild(child);
     }
   };
 
-  var onSuccessMessage = function () {
-    var successTemplate = document.querySelector('#success')
-    .content
-    .querySelector('.success');
-    var successElement = successTemplate.cloneNode(true);
-    successElement.addEventListener('click', function () {
-      hideMessageElement(successElement);
-    });
-    document.addEventListener('keydown', function (evt) {
-      onESCHideMessageElement(evt, successElement);
-    });
-    document.querySelector('main').appendChild(successElement);
-  };
   document.querySelector('.ad-form__reset').addEventListener('click', deactivateSite);
 
 })();

@@ -1,6 +1,5 @@
 'use strict';
 (function () {
-  var ESC_KEYCODE = 27;
   var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
   var translateOfferTypeintoRussian = function (adData) {
@@ -90,7 +89,7 @@
     }
   };
   var onEscClose = function (evt) {
-    if (evt.keyCode === ESC_KEYCODE) {
+    if (evt.keyCode === window.util.ESC_KEYCODE) {
       hideCard();
     }
   };
@@ -99,7 +98,6 @@
     fillCard: fillCard,
     showCard: showCard,
     hideCard: hideCard,
-    ESC_KEYCODE: ESC_KEYCODE
   };
 
 })();
