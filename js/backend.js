@@ -6,7 +6,7 @@
   var TIMEOUT = 10000; // 10s
   var URL = 'https://js.dump.academy/keksobooking';
 
-  window.load = function (onLoad, onError) {
+  var load = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
     xhr.open('GET', URL + '/data');
@@ -28,7 +28,7 @@
     xhr.send();
   };
 
-  window.upload = function (data, onLoad, onError) {
+  var upload = function (data, onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -50,6 +50,10 @@
 
     xhr.open('POST', URL);
     xhr.send(data);
+  };
+  window.backend = {
+    load: load,
+    upload: upload
   };
 
 })();

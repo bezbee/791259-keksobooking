@@ -5,7 +5,7 @@
       .content
       .querySelector('.map__pin');
 
-  window.createPin = function (adData) {
+  var createPin = function (adData) {
     var pinElement = pinTemplate.cloneNode(true);
     var pinElementImage = pinElement.querySelector('img');
     pinElement.style.top = adData.location.y - window.data.PIN_WIDTH + 'px';
@@ -21,5 +21,7 @@
     });
     return pinElement;
   };
+
+  window.pin = {createPin: createPin};
 
 })();

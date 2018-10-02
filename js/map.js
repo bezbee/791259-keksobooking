@@ -77,7 +77,7 @@
   var renderPins = function (adsData) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < NUMBER_OF_ADS_TO_SHOW; i++) {
-      fragment.appendChild(window.createPin(adsData[i]));
+      fragment.appendChild(window.pin.createPin(adsData[i]));
     }
     document.querySelector('.map__pins').appendChild(fragment);
   };
@@ -121,7 +121,7 @@
   var activateSite = function () {
     window.data.map.classList.remove('map--faded');
     window.form.adForm.classList.remove('ad-form--disabled');
-    window.load(renderPins, showErrorMessage);
+    window.backend.load(renderPins, showErrorMessage);
     window.util.removeDisabledAttribute(window.form.fieldsets);
     window.util.removeDisabledAttribute(filterSelects);
   };

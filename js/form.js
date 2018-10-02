@@ -64,7 +64,7 @@
 
   adForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.upload(new FormData(adForm), function () {
+    window.backend.upload(new FormData(adForm), function () {
       window.map.showSuccessMessage();
       deactivateSite();
     }, window.map.showErrorMessage);
