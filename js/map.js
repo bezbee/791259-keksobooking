@@ -10,6 +10,7 @@
   .querySelector('.success');
   var root = document.querySelector('main');
   var filterSelects = document.querySelectorAll('.map__filters select');
+  var ads = [];
 
   mainPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -136,7 +137,6 @@
     showSuccessMessage: showSuccessMessage
   };
 
-  var ads = [];
 
   var filter = {
     roomCount: 'any',
@@ -164,7 +164,7 @@
     switch (priceType) {
       case 'low': return offer.price < 10000;
       case 'middle': return offer.price <= 50000 && offer.price >= 10000;
-      case 'high': return offer.price < 10000;
+      case 'high': return offer.price > 50000;
     }
     return true;
   };
@@ -176,17 +176,39 @@
     return parseInt(guests, 10) === offer.guests;
   };
 
+  // /////////////////
+
+  var filterByFeatures = function (offer, featuresArr) {
+    for (var j = 0; j < featuresArr.length; j++) {
+      var value = featuresArr[j];
+    }
+
+    for (var i = 0; i < offer.features.length; i++) {
+      if (offer.features[i] === value) {
+        return offer.features;
+      }
+    }
+    return true;
+  };
+
+  // /////////////////
+
+  var addFeature = function (type, value) {
+    filter.type.push(value);
+  };
 
   var add = function (type, value) {
     filter[type] = value;
   };
+
 
   var apply = function () {
     return ads.filter(function (ad) {
       return filterByPrice(ad.offer, filter.price) &&
              filterByType(ad.offer, filter.type) &&
              filterByRooms(ad.offer, filter.roomCount) &&
-             filterbyGuests(ad.offer, filter.guests);
+             filterbyGuests(ad.offer, filter.guests) &&
+             filterByFeatures(ad.offer, filter.features);
     });
   };
 
@@ -203,6 +225,9 @@
         break;
       case 'housing-guests':
         add('guests', evt.target.value);
+        break;
+      case 'housing-features':
+        addFeature('features', evt.target.value);
         break;
     }
     var filtered = apply(ads);
