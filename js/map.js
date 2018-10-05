@@ -180,15 +180,15 @@
 
   var filterByFeatures = function (offer, featuresArr) {
     for (var j = 0; j < featuresArr.length; j++) {
-      var value = featuresArr[j];
+      var value = featuresArr[j]; // <---  проходимся по массиву с выбранными по клику значениями и берем значение для сравнения
     }
 
     for (var i = 0; i < offer.features.length; i++) {
-      if (offer.features[i] === value) {
-        return offer.features;
+      if (offer.features.includes(value)) { //  <---  проходимся по массиву, полученному из сети и смотрим, если он содержит выбранные по клику значения
+        return offer.features; //  <---  если содержит, используем этот массив для отрисовки
       }
     }
-    return true;
+    return true; // <---  если не содержит, показываем по умолчанию
   };
 
   // /////////////////
