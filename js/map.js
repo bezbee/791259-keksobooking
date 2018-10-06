@@ -11,6 +11,7 @@
   var root = document.querySelector('main');
   var filterSelects = document.querySelectorAll('.map__filters select');
   var ads = [];
+  var NUMBER_OF_ADS = 5;
 
   mainPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -77,7 +78,7 @@
   var renderPins = function (adsData) {
     var fragment = document.createDocumentFragment();
     adsData.forEach(function (adData) {
-      fragment.appendChild(window.pin.createPin(adData));
+      fragment.appendChild(window.pin.create(adData));
     });
     document.querySelector('.map__pins').appendChild(fragment);
   };
@@ -120,7 +121,7 @@
 
   var loaded = function (adsData) {
     ads = adsData;
-    renderPins(ads.slice(0, 5));
+    renderPins(ads.slice(0, NUMBER_OF_ADS));
   };
 
   var activateSite = function () {
@@ -138,102 +139,30 @@
   };
 
 
-  var filter = {
-    roomCount: 'any',
-    type: 'any',
-    price: '0',
-    guests: 'any',
-    features: []
-  };
-
-  var filterByType = function (offer, type) {
-    if (type === 'any') {
-      return true;
-    }
-    return offer.type === type;
-  };
-
-  var filterByRooms = function (offer, roomCount) {
-    if (roomCount === 'any') {
-      return true;
-    }
-    return parseInt(roomCount, 10) === offer.rooms;
-  };
-
-  var filterByPrice = function (offer, priceType) {
-    switch (priceType) {
-      case 'low': return offer.price < 10000;
-      case 'middle': return offer.price <= 50000 && offer.price >= 10000;
-      case 'high': return offer.price > 50000;
-    }
-    return true;
-  };
-
-  var filterbyGuests = function (offer, guests) {
-    if (guests === 'any') {
-      return true;
-    }
-    return parseInt(guests, 10) === offer.guests;
-  };
-
-  // /////////////////
-
-  var filterByFeatures = function (offer, featuresArr) {
-    for (var j = 0; j < featuresArr.length; j++) {
-      var value = featuresArr[j]; // <---  проходимся по массиву с выбранными по клику значениями и берем значение для сравнения
-    }
-
-    for (var i = 0; i < offer.features.length; i++) {
-      if (offer.features.includes(value)) { //  <---  проходимся по массиву, полученному из сети и смотрим, если он содержит выбранные по клику значения
-        return offer.features; //  <---  если содержит, используем этот массив для отрисовки
-      }
-    }
-    return true; // <---  если не содержит, показываем по умолчанию
-  };
-
-  // /////////////////
-
-  var addFeature = function (type, value) {
-    filter.type.push(value);
-  };
-
-  var add = function (type, value) {
-    filter[type] = value;
-  };
-
-
-  var apply = function () {
-    return ads.filter(function (ad) {
-      return filterByPrice(ad.offer, filter.price) &&
-             filterByType(ad.offer, filter.type) &&
-             filterByRooms(ad.offer, filter.roomCount) &&
-             filterbyGuests(ad.offer, filter.guests) &&
-             filterByFeatures(ad.offer, filter.features);
-    });
-  };
-
   document.querySelector('.map__filters').addEventListener('change', function (evt) {
     switch (evt.target.id) {
       case 'housing-type':
-        add('type', evt.target.value);
+        window.filter.addFilter('type', evt.target.value);
         break;
       case 'housing-rooms':
-        add('roomCount', evt.target.value);
+        window.filter.addFilter('roomCount', evt.target.value);
         break;
       case 'housing-price':
-        add('price', evt.target.value);
+        window.filter.addFilter('price', evt.target.value);
         break;
       case 'housing-guests':
-        add('guests', evt.target.value);
-        break;
-      case 'housing-features':
-        addFeature('features', evt.target.value);
+        window.filter.addFilter('guests', evt.target.value);
         break;
     }
-    var filtered = apply(ads);
+
+    if (evt.target.checked) {
+      window.filter.filter.features.push(evt.target.value);
+    }
+
     window.form.removePins();
-    renderPins(filtered.slice(0, 5));
     window.card.hideCard();
+    renderPins(window.filter.apply(ads).slice(0, NUMBER_OF_ADS));
+
   });
 
 })();
