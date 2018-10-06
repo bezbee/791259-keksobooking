@@ -161,7 +161,7 @@
 
     window.form.removePins();
     window.card.hideCard();
-    renderPins(window.filter.apply(ads).slice(0, NUMBER_OF_ADS));
+    window.debounce(renderPins(window.filter.apply(ads).slice(0, NUMBER_OF_ADS)));
 
   });
 
