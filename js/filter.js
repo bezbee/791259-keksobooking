@@ -72,12 +72,21 @@
     });
   };
 
+  var inputs = document.querySelectorAll('.map__checkbox');
+  inputs.forEach(function (input) {
+    input.addEventListener('keyup', function (evt) {
+      if (evt.keyCode === window.util.ENTER_KEYCODE) {
+        input.click();
+      }
+    });
+  });
+
+
   window.filter = {
     addFeatureToArray: addFeatureToArray,
     removeFeatureFromArray: removeFeatureFromArray,
     addFilter: addFilter,
     apply: apply
   };
-
 
 })();
