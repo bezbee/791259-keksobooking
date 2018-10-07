@@ -22,6 +22,8 @@
     return pinElement;
   };
 
-  window.pin = {create: createPin};
+  window.pin = {
+    create: createPin
+  };
 
 })();

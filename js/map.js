@@ -156,10 +156,10 @@
     }
 
     if (evt.target.checked) {
-      window.filter.filter.features.push(evt.target.value);
+      window.filter.addFeatureToArray(evt.target.value);
     }
     if (evt.target.checked === false) {
-      window.filter.filter.features.splice(window.filter.filter.features.indexOf('evt.target.value'), 1);
+      window.filter.removeFeatureFromArray(evt.target.value);
     }
 
 

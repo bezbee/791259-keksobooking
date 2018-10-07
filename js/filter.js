@@ -54,6 +54,14 @@
     filter[type] = value;
   };
 
+  var addFeatureToArray = function (value) {
+    filter.features.push(value);
+  };
+
+  var removeFeatureFromArray = function (value) {
+    filter.features.splice(filter.features.indexOf(value), 1);
+  };
+
   var apply = function (array) {
     return array.filter(function (ad) {
       return filterByPrice(ad.offer, filter.price) &&
@@ -65,7 +73,8 @@
   };
 
   window.filter = {
-    filter: filter,
+    addFeatureToArray: addFeatureToArray,
+    removeFeatureFromArray: removeFeatureFromArray,
     addFilter: addFilter,
     apply: apply
   };
