@@ -158,6 +158,10 @@
     if (evt.target.checked) {
       window.filter.filter.features.push(evt.target.value);
     }
+    if (evt.target.checked === false) {
+      window.filter.filter.features.splice(window.filter.filter.features.indexOf('evt.target.value'), 1);
+    }
+
 
     window.form.removePins();
     window.card.hideCard();
