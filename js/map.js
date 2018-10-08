@@ -59,7 +59,9 @@
       upEvt.preventDefault();
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
-      activateSite();
+      if (window.data.map.getAttribute('class') === 'map map--faded') {
+        activateSite();
+      }
       window.form.adForm.querySelector('#address').setAttribute('value', (mainPinCoords.top + mainPin.clientHeight) + ', ' +
     (mainPinCoords.left + mainPin.clientWidth / 2));
     };
