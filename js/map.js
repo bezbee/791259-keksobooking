@@ -9,8 +9,9 @@
   .content
   .querySelector('.success');
   var root = document.querySelector('main');
-  var NUMBER_OF_ADS_TO_SHOW = 5;
   var filterSelects = document.querySelectorAll('.map__filters select');
+  var ads = [];
+  var NUMBER_OF_ADS = 5;
 
   mainPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -76,9 +77,9 @@
 
   var renderPins = function (adsData) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < NUMBER_OF_ADS_TO_SHOW; i++) {
-      fragment.appendChild(window.createPin(adsData[i]));
-    }
+    adsData.forEach(function (adData) {
+      fragment.appendChild(window.pin.create(adData));
+    });
     document.querySelector('.map__pins').appendChild(fragment);
   };
 
@@ -118,10 +119,15 @@
     root.appendChild(errorElement);
   };
 
+  var loaded = function (adsData) {
+    ads = adsData;
+    renderPins(ads.slice(0, NUMBER_OF_ADS));
+  };
+
   var activateSite = function () {
     window.data.map.classList.remove('map--faded');
     window.form.adForm.classList.remove('ad-form--disabled');
-    window.load(renderPins, showErrorMessage);
+    window.backend.load(loaded, showErrorMessage);
     window.util.removeDisabledAttribute(window.form.fieldsets);
     window.util.removeDisabledAttribute(filterSelects);
   };
@@ -132,5 +138,35 @@
     showSuccessMessage: showSuccessMessage
   };
 
+
+  document.querySelector('.map__filters').addEventListener('change', function (evt) {
+    switch (evt.target.id) {
+      case 'housing-type':
+        window.filter.addFilter('type', evt.target.value);
+        break;
+      case 'housing-rooms':
+        window.filter.addFilter('roomCount', evt.target.value);
+        break;
+      case 'housing-price':
+        window.filter.addFilter('price', evt.target.value);
+        break;
+      case 'housing-guests':
+        window.filter.addFilter('guests', evt.target.value);
+        break;
+    }
+
+    if (evt.target.checked) {
+      window.filter.addFeatureToArray(evt.target.value);
+    }
+    if (evt.target.checked === false) {
+      window.filter.removeFeatureFromArray(evt.target.value);
+    }
+
+
+    window.form.removePins();
+    window.card.hideCard();
+    window.debounce(renderPins(window.filter.apply(ads).slice(0, NUMBER_OF_ADS)));
+
+  });
 
 })();

@@ -64,7 +64,7 @@
 
   adForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.upload(new FormData(adForm), function () {
+    window.backend.upload(new FormData(adForm), function () {
       window.map.showSuccessMessage();
       deactivateSite();
     }, window.map.showErrorMessage);
@@ -72,6 +72,14 @@
 
   var fillMainPinInitialCoordinates = function () {
     adForm.querySelector('#address').setAttribute('value', MainPin.TOP + ', ' + MainPin.LEFT);
+  };
+
+  var removePins = function () {
+    var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    for (var i = pins.length - 1; i >= 0; i--) {
+      var child = pins[i];
+      window.util.removeElement(child);
+    }
   };
 
   var deactivateSite = function () {
@@ -86,11 +94,7 @@
     window.map.mainPin.style.left = MainPin.TOP + 'px';
     window.map.mainPin.style.top = MainPin.LEFT + 'px';
     fillMainPinInitialCoordinates();
-    var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-    for (var i = pins.length - 1; i >= 0; i--) {
-      var child = pins[i];
-      window.util.removeElement(child);
-    }
+    removePins();
   };
 
   document.querySelector('.ad-form__reset').addEventListener('click', deactivateSite);
@@ -98,6 +102,7 @@
   window.form = {
     adForm: adForm,
     fieldsets: fieldsets,
-    fillMainPinInitialCoordinates: fillMainPinInitialCoordinates
+    fillMainPinInitialCoordinates: fillMainPinInitialCoordinates,
+    removePins: removePins
   };
 })();
