@@ -3,7 +3,6 @@
 (function () {
   var adForm = document.querySelector('.ad-form');
   var fieldsets = document.querySelectorAll('fieldset');
-  var inputs = document.querySelectorAll('.map__checkbox');
   var priceInput = document.querySelector('#price');
   var typeSelect = document.querySelector('#type');
   var MIN_PRICE = ['0', '5000', '1000', '10000'];
@@ -88,12 +87,6 @@
     for (var j = fieldsets.length - 1; j >= 0; j--) {
       var childForm = fieldsets[j];
       childForm.setAttribute('disabled', '');
-    }
-    for (var k = inputs.length - 1; k >= 0; k--) {
-      var inputForm = inputs[k];
-      if (inputForm.getAttribute('checked') === true) {
-        inputForm.removeAttribute('checked');
-      }
     }
     window.card.hideCard();
     window.data.map.classList.add('map--faded');
