@@ -13,6 +13,7 @@
   var filterSelects = document.querySelectorAll('.map__filters select');
   var ads = [];
   var NUMBER_OF_ADS = 5;
+  var activated;
 
   mainPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -60,8 +61,9 @@
       upEvt.preventDefault();
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
-      if (window.data.map.getAttribute('class') === 'map map--faded') {
+      if (!activated) {
         activateSite();
+        activated = true;
       }
       window.form.adForm.querySelector('#address').setAttribute('value', (mainPinCoords.top + mainPin.clientHeight) + ', ' +
     (mainPinCoords.left + mainPin.clientWidth / 2));
@@ -158,14 +160,18 @@
       window.filter.removeFeatureFromArray(evt.target.value);
     }
 
-
     window.form.removePins();
     window.card.hideCard();
     window.debounce(renderPins(window.filter.apply(ads).slice(0, NUMBER_OF_ADS)));
 
   });
 
+  var switchActivatedtoFalse = function () {
+    activated = false;
+  };
+
   window.map = {
+    switchActivatedtoFalse: switchActivatedtoFalse,
     mainPin: mainPin,
     showErrorMessage: showErrorMessage,
     showSuccessMessage: showSuccessMessage,
