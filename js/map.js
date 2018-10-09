@@ -9,6 +9,7 @@
   .content
   .querySelector('.success');
   var root = document.querySelector('main');
+  var filterForm = document.querySelector('.map__filters');
   var filterSelects = document.querySelectorAll('.map__filters select');
   var ads = [];
   var NUMBER_OF_ADS = 5;
@@ -134,14 +135,7 @@
     window.util.removeDisabledAttribute(filterSelects);
   };
 
-  window.map = {
-    mainPin: mainPin,
-    showErrorMessage: showErrorMessage,
-    showSuccessMessage: showSuccessMessage
-  };
-
-
-  document.querySelector('.map__filters').addEventListener('change', function (evt) {
+  filterForm.addEventListener('change', function (evt) {
     switch (evt.target.id) {
       case 'housing-type':
         window.filter.addFilter('type', evt.target.value);
@@ -170,5 +164,12 @@
     window.debounce(renderPins(window.filter.apply(ads).slice(0, NUMBER_OF_ADS)));
 
   });
+
+  window.map = {
+    mainPin: mainPin,
+    showErrorMessage: showErrorMessage,
+    showSuccessMessage: showSuccessMessage,
+    filterForm: filterForm
+  };
 
 })();

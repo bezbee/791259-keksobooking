@@ -84,6 +84,8 @@
 
   var deactivateSite = function () {
     adForm.reset();
+    window.map.filterForm.reset();
+    window.filter.resetFilterArray();
     for (var j = fieldsets.length - 1; j >= 0; j--) {
       var childForm = fieldsets[j];
       childForm.setAttribute('disabled', '');
