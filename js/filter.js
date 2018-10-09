@@ -72,11 +72,22 @@
     });
   };
 
+  var resetFilterArray = function () {
+    filter = {
+      roomCount: 'any',
+      type: 'any',
+      price: '0',
+      guests: 'any',
+      features: []
+    };
+  };
+
   window.filter = {
     addFeatureToArray: addFeatureToArray,
     removeFeatureFromArray: removeFeatureFromArray,
     addFilter: addFilter,
-    apply: apply
+    apply: apply,
+    resetFilterArray: resetFilterArray
   };
 
 })();
