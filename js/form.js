@@ -83,7 +83,7 @@
   };
 
   var deactivateSite = function () {
-    window.map.switchActivatedtoFalse();
+    window.map.setActive(false);
     adForm.reset();
     window.map.filterForm.reset();
     window.filter.resetFilterArray();

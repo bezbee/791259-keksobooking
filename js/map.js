@@ -166,12 +166,12 @@
 
   });
 
-  var switchActivatedtoFalse = function () {
-    activated = false;
+  var setActive = function (isActive) {
+    activated = isActive;
   };
 
   window.map = {
-    switchActivatedtoFalse: switchActivatedtoFalse,
+    setActive: setActive,
     mainPin: mainPin,
     showErrorMessage: showErrorMessage,
     showSuccessMessage: showSuccessMessage,
