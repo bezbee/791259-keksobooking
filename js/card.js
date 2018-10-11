@@ -1,7 +1,7 @@
 'use strict';
 (function () {
-  var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
+  var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
   var translateOfferTypeintoRussian = function (adData) {
     if (adData === 'palace') {
@@ -72,7 +72,7 @@
   };
 
   var showCard = function (adData) {
-    window.data.map.insertBefore(window.card.fillCard(adData), document.querySelector('.map__filters-container'));
+    window.map.mainMap.insertBefore(window.card.fillCard(adData), document.querySelector('.map__filters-container'));
     var closePopup = document.querySelector('.popup__close');
     closePopup.focus();
     closePopup.addEventListener('click', function () {
@@ -82,13 +82,10 @@
   };
 
   var hideCard = function () {
-    var pins = document.querySelectorAll('.map__pin');
-    pins.forEach(function (pin) {
-      if (pin.className === 'map__pin map__pin--active') {
-        pin.classList.remove('map__pin--active');
-      }
-    });
-
+    var activePin = document.querySelector('.map__pin--active');
+    if (activePin) {
+      activePin.classList.remove('map__pin--active');
+    }
     document.removeEventListener('keydown', onEscClose);
     var cardToRemove = document.querySelector('.map__card');
     if (cardToRemove) {

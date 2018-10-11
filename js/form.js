@@ -1,27 +1,24 @@
 'use strict';
 
 (function () {
+  var MIN_PRICE = ['0', '5000', '1000', '10000'];
+  var MainPin = {
+    TOP: 570,
+    LEFT: 375
+  };
   var adForm = document.querySelector('.ad-form');
   var fieldsets = document.querySelectorAll('fieldset');
-  var priceInput = document.querySelector('#price');
-  var typeSelect = document.querySelector('#type');
-  var MIN_PRICE = ['0', '5000', '1000', '10000'];
-
-  var timeInSelect = document.querySelector('#timein');
-  var timeOutSelect = document.querySelector('#timeout');
-
-  var capacityList = document.querySelector('#capacity');
+  var priceInput = adForm.querySelector('#price');
+  var typeSelect = adForm.querySelector('#type');
+  var timeInSelect = adForm.querySelector('#timein');
+  var timeOutSelect = adForm.querySelector('#timeout');
+  var capacityList = adForm.querySelector('#capacity');
   var roomsAndCapacity = {};
   roomsAndCapacity['1'] = ['для 1 гостя'];
   roomsAndCapacity['2'] = ['для 1 гостя', 'для 2 гостей'];
   roomsAndCapacity['3'] = ['для 1 гостя', 'для 2 гостей', 'для 3 гостей'];
   roomsAndCapacity['100'] = ['не для гостей'];
-  var roomsList = document.querySelector('#room_number');
-
-  var MainPin = {
-    TOP: 570,
-    LEFT: 375
-  };
+  var roomsList = adForm.querySelector('#room_number');
 
   var syncronizeTypeWithPrice = function (index, minPrice) {
     if (typeSelect.selectedIndex === index) {
@@ -92,7 +89,7 @@
       childForm.setAttribute('disabled', '');
     }
     window.card.hideCard();
-    window.data.map.classList.add('map--faded');
+    window.map.mainMap.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
     window.map.mainPin.style.left = MainPin.TOP + 'px';
     window.map.mainPin.style.top = MainPin.LEFT + 'px';
@@ -106,6 +103,7 @@
     adForm: adForm,
     fieldsets: fieldsets,
     fillMainPinInitialCoordinates: fillMainPinInitialCoordinates,
-    removePins: removePins
+    removePins: removePins,
+    deactivateSite: deactivateSite
   };
 })();
