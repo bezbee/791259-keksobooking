@@ -123,7 +123,6 @@
     document.addEventListener('keydown', onESCHideErrorMessage);
     errorElement.querySelector('.error__button').addEventListener('click', function () {
       hidePopup(errorElement);
-      window.form.deactivateSite();
     });
     root.appendChild(errorElement);
   };
