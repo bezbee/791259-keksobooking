@@ -68,7 +68,7 @@
   });
 
   var fillMainPinInitialCoordinates = function () {
-    adForm.querySelector('#address').setAttribute('value', MainPin.TOP + ', ' + MainPin.LEFT);
+    adForm.querySelector('#address').setAttribute('value', MainPin.LEFT + ', ' + MainPin.TOP);
   };
 
   var removePins = function () {
