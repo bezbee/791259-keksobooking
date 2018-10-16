@@ -22,7 +22,7 @@
     var div = document.createElement('div');
     div.className = 'ad-form__photo';
     div.appendChild(img);
-    photoBlock.insertBefore(div, photoBlock.childNodes[3]);
+    photoBlock.appendChild(div);
   };
 
   var addPhoto = function (fileChooser, handler) {
