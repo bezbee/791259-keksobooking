@@ -7,15 +7,14 @@
   var avatarInput = document.querySelector('#avatar');
   var avatarPreview = document.querySelector('.ad-form-header__preview img');
   var photoBlock = document.querySelector('.ad-form__photo-container');
-  var reader = new FileReader();
 
-  var onAvatarLoad = function () {
-    avatarPreview.src = reader.result;
+  var onAvatarLoad = function (event) {
+    avatarPreview.src = event.target.result;
   };
 
-  var onPhotoLoad = function () {
+  var onPhotoLoad = function (event) {
     var img = document.createElement('img');
-    img.src = reader.result;
+    img.src = event.target.result;
     img.width = '70';
     img.height = '70';
     img.alt = 'Фотография пользователя';
@@ -26,7 +25,7 @@
   };
 
   var addPhoto = function (fileChooser, handler) {
-
+    var reader = new FileReader();
     fileChooser.addEventListener('change', function () {
       var file = fileChooser.files[0];
       var fileName = file.name.toLowerCase();
